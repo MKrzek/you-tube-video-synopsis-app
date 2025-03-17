@@ -3,6 +3,7 @@ import { OpenAI } from "openai";
 import Redis from "ioredis";
 import { z } from "zod";
 import { getAuth } from "@clerk/nextjs/server";
+import getTranscript from "@/utils/you-tube-transcript";
 
 const schema = z.object({
   url: z.string().url().refine((val) => val.includes("youtube.com") || val.includes("youtu.be"), {
@@ -37,24 +38,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const { url } = parsed.data;
+    console.log('URL', url)
     const videoId = extractVideoId(url);
     if (!videoId) {
       return res.status(400).json({ error: "Invalid YouTube video URL" });
     }
 
-    const cacheKey = `summary:${userId}:${videoId}`;
+    const cacheKey = `summary:${ userId }:${ videoId }`;
 
     const cachedSummary = await redis.get(cacheKey);
     if (cachedSummary) {
       return res.status(200).json({ summary: JSON.parse(cachedSummary) });
     }
 
-    const prompt = `Summarize the key points of the YouTube video (${url}) in bullet points. Avoid repetition.`;
+    const transcript = await getTranscript(videoId);
+
+    const prompt = `Summarize the following YouTube transcript in bullet points:\n\n${ transcript }`;
 
     try {
       const chatResponse = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "system", content: prompt }],
+        messages: [{ role: "user", content: prompt }],
         max_tokens: 500,
       });
 
