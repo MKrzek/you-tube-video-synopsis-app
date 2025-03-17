@@ -1,29 +1,44 @@
-
 .page {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: var(--primary-color);
-    font-family: Arial, Helvetica, sans-serif;
-    padding-top: 80px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--primary-color);
+  font-family: Arial, Helvetica, sans-serif;
+  padding-top: 80px;
+  overflow-y: auto;
 }
 
 .header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px var(--shadow-color);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px var(--shadow-color);
 }
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--primary-color);
+  padding: 3rem;
+  width: 100%;
+  max-width: 50rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.6rem 1.2rem var(--shadow-color);
+  margin-top: 6rem;
+  margin-bottom: 4rem;
+}
+
 
 .header h2 {
     font-size: 1.5rem;
@@ -47,7 +62,6 @@
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Sign Out Hover & Active */
 .signOutButton:hover {
     background-color: var(--brown-hover-color);
     box-shadow: 0px 2px 8px var(--shadow-hover-color);
@@ -59,20 +73,6 @@
 }
 
 
-/* Centers everything and limits width for better readability */
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--primary-color);
-  padding: 3rem;
-  width: 100%;
-  max-width: 50rem;
-  border-radius: 1rem;
-  box-shadow: 0 0.6rem 1.2rem var(--shadow-color);
-}
-
-/* Centers form elements and ensures proper spacing */
 .form {
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@
   width: 100%;
 }
 
-/* Label Styling */
+
 .label {
   color: var(--secondary-color);
   font-size: 1.8rem;
@@ -91,7 +91,6 @@
   line-height: 1.4;
 }
 
-/* Submit Button */
 .submitButton {
   padding: 0.8rem 1.6rem;
   margin: 5rem auto;
@@ -108,7 +107,6 @@
   box-shadow: 0 0.4rem 0.6rem var(--shadow-color);
 }
 
-/* Hover */
 .submitButton:hover {
   background-color: var(--pink-color);
   color: var(--brown-hover-color);
@@ -117,13 +115,11 @@
   transform: translateY(-0.2rem);
 }
 
-/* Focus */
 .submitButton:focus {
   outline: 3px solid var(--brown-color);
   outline-offset: 3px;
 }
 
-/* Active */
 .submitButton:active {
   background-color: var(--sand-active-color);
   color: var(--primary-active-color);
@@ -132,7 +128,6 @@
   box-shadow: 0 2px 4px var(--shadow-color);
 }
 
-/* Disabled */
 .submitButton:disabled {
   background-color: var(--disabled-background-color);
   color: var(--disabled-color);
@@ -141,7 +136,6 @@
   box-shadow: none;
 }
 
-/* Input Field */
 .inputField {
   width: 100%;
   max-width: 40rem;
@@ -232,3 +226,51 @@
   border-color: #d98486;
 }
 
+.summarySection {
+  margin-top: 3rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 50rem;
+  background: var(--input-bg);
+  border-radius: 1rem;
+  box-shadow: 0 0.6rem 1.2rem var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+
+.summarySection h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+}
+
+.summarySection p,
+.summarySection ul {
+  font-size: 1.6rem;
+  color: var(--primary-text-color);
+  line-height: 1.6;
+  text-align: left;
+  width: 100%;
+}
+
+.summarySection ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+}
+
+.summarySection li {
+  margin-bottom: 0.8rem;
+}
+
+.summarySection a {
+  color: var(--pink-color);
+  text-decoration: underline;
+  transition: color 0.3s ease-in-out;
+}
+
+.summarySection a:hover {
+  color: var(--brown-hover-color);
+}

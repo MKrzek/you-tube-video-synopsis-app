@@ -6,6 +6,7 @@ import axios from "axios";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactMarkdown from "react-markdown";
 
 type ApiError = string
 
@@ -116,7 +117,11 @@ export default function Home() {
             </button>
 
           </div>
-          }
+            }
+            { summary && <section className={styles.summarySection}>
+              <h3>Summary</h3>
+              <ReactMarkdown>{summary}</ReactMarkdown>
+            </section> }
         </main>
       </SignedIn>
     </div>
