@@ -4,6 +4,7 @@ import Redis from "ioredis";
 import { z } from "zod";
 import { getAuth } from "@clerk/nextjs/server";
 import getTranscript from "@/utils/you-tube-transcript";
+import extractVideoId from "@/utils/extractVideoId";
 
 const schema = z.object({
   url: z.string().url().refine((val) => val.includes("youtube.com") || val.includes("youtu.be"), {
@@ -13,16 +14,8 @@ const schema = z.object({
 
 const redis = new Redis(process.env.REDIS_URL!);
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
-const extractVideoId = (url: string): string | null => {
-  const match = url.match(
-    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube.com\/shorts\/)([^"&?\/\s]{11})/
-  );
-  return match ? match[1] : null;
-};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -38,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const { url } = parsed.data;
-    console.log('URL', url)
+
     const videoId = extractVideoId(url);
     if (!videoId) {
       return res.status(400).json({ error: "Invalid YouTube video URL" });
@@ -53,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const transcript = await getTranscript(videoId);
 
-    const prompt = `Summarize the following YouTube transcript in bullet points:\n\n${ transcript }`;
+    const prompt = `Summarize the following YouTube transcript in bullet points:\n\n${ transcript }. Develop each bullet point if possible.`;
 
     try {
       const chatResponse = await openai.chat.completions.create({
