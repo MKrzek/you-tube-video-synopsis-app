@@ -23,7 +23,7 @@ export default function Home() {
   const [ downloadLoading, setDownloadLoading ] = useState(false);
   const [ emailLoading, setEmailLoading ] = useState(false);
   const [ summary, setSummary ] = useState()
-  const [ summaryApiError, setSummaryApiError ] = useState<ApiError|undefined>()
+  const [ apiError, setApiError ] = useState<ApiError|undefined>()
 
   const submit = async(data: FormFieldsInterface) => {
     setSummaryLoading(true)
@@ -37,26 +37,53 @@ export default function Home() {
 
     } catch (apiError) {
       if ( axios.isAxiosError(apiError) ) {
-        setSummaryApiError(apiError?.response?.data.error)
+        setApiError(apiError?.response?.data.error)
       } else {
-        setSummaryApiError('An unknown error occured')
+        setApiError('An unknown error occurred')
       }
     } finally {
       setSummaryLoading(false)
     }
   }
 
-  const downloadAsPDF = () => {
+  const downloadAsPDF = async () => {
     setDownloadLoading(true)
+    try {
+      const res = await axios.post('/api/downloadPDF', { summary })
+      if (res) {
 
-    setDownloadLoading(false)
+      }
+
+    } catch (apiError) {
+      if (axios.isAxiosError(apiError)) {
+        setApiError(apiError?.response?.data.error)
+      } else {
+        setApiError('An unknown download error occurred')
+      }
+    } finally {
+      setDownloadLoading(false)
+    }
   }
 
-  const sendByEmail = () => {
-    setEmailLoading(true)
 
+const sendByEmail = async() => {
+  setEmailLoading(true)
+  try {
+    const res = await axios.post('/api/sendByEmail', { summary })
+    if (res) {
+
+    }
+  } catch (apiError) {
+    if (axios.isAxiosError(apiError)) {
+     setApiError(apiError?.response?.data.error)
+    } else {
+      setApiError('An unknown email error occurred')
+    }
+  } finally {
     setEmailLoading(false)
   }
+}
+
 
   if (!isSignedIn) {
     return <RedirectToSignIn />;
@@ -90,8 +117,8 @@ export default function Home() {
                 })}
               />
 
-            {errors?.urlInput && <span className={styles.errorMessage}>{errors.urlInput.message}</span>}
-            {summaryApiError && <span className={styles.errorMessage}>{summaryApiError}</span>}
+            { errors?.urlInput && <span className={styles.errorMessage}>{errors.urlInput.message}</span> }
+            { apiError && <span className={styles.errorMessage}>{apiError}</span> }
 
             <button disabled={summaryLoading} className={styles.submitButton}>
               {summaryLoading ? 'Loading summary...' : 'Generate summary'}
@@ -99,24 +126,22 @@ export default function Home() {
           </form>
 
             { summary && <div className={ styles.buttonGroup }>
+                <button
+                  onClick={downloadAsPDF}
+                  className={styles.downloadButton}
+                  disabled={summaryLoading || downloadLoading}
+                >
+                  { downloadLoading ? 'Loading...' : 'Download as PDF' }
+                </button>
 
-            <button
-              onClick={downloadAsPDF}
-              className={styles.downloadButton}
-              disabled={summaryLoading || downloadLoading}
-            >
-              { downloadLoading ? 'Loading...' : 'Download as PDF' }
-              </button>
-
-            <button
-              onClick={sendByEmail}
-              className={styles.emailButton}
-              disabled={summaryLoading || emailLoading}
-            >
-              {emailLoading ? 'Loading...' : 'Send in email'}
-            </button>
-
-          </div>
+                <button
+                  onClick={sendByEmail}
+                  className={styles.emailButton}
+                  disabled={summaryLoading || emailLoading}
+                >
+                  {emailLoading ? 'Loading...' : 'Send in email'}
+                </button>
+            </div>
             }
             { summary && <section className={styles.summarySection}>
               <h3>Summary</h3>
