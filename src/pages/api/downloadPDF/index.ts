@@ -12,7 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { sessionClaims } = getAuth(req)
-    console.log('AAAAAA', sessionClaims)
 
     if (!sessionClaims?.primaryEmail) {
       return res.status(401).json({ error: "You are not authenticated" });
@@ -45,6 +44,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (axios.isAxiosError(error)) {
       res.status(error?.status ?? 500).json({ error: error.message ?? 'Failed to download PDF' })
     }
-
   }
 }
