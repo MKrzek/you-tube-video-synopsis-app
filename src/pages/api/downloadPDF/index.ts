@@ -39,6 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       { headers: { Authorization: `Bearer ${ process.env.PDF_SWITCH_API_KEY }` } }
     );
 
+    console.log('response,', response)
     res.status(200).send({ pdfUrl: response.data.url });
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactMarkdown from "react-markdown";
 
-type ApiError = string
+type ApiError = string;
 
 interface FormFieldsInterface {
   urlInput: string
@@ -22,8 +22,8 @@ export default function Home() {
   const [ summaryLoading, setSummaryLoading ] = useState(false);
   const [ downloadLoading, setDownloadLoading ] = useState(false);
   const [ emailLoading, setEmailLoading ] = useState(false);
-  const [ summary, setSummary ] = useState()
-  const [ apiError, setApiError ] = useState<ApiError|undefined>()
+  const [summary, setSummary] = useState();
+  const [apiError, setApiError] = useState<ApiError | undefined>();
 
   const submit = async(data: FormFieldsInterface) => {
     setSummaryLoading(true)
@@ -51,7 +51,7 @@ export default function Home() {
     try {
       const res = await axios.post('/api/downloadPDF', { summary })
       if (res) {
-
+    //show toast message downloaded
       }
 
     } catch (apiError) {
@@ -71,7 +71,7 @@ const sendByEmail = async() => {
   try {
     const res = await axios.post('/api/sendByEmail', { summary })
     if (res) {
-
+// show toast message sent
     }
   } catch (apiError) {
     if (axios.isAxiosError(apiError)) {
