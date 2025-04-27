@@ -6,7 +6,7 @@ const Spinner = () => {
       role="status"
       className={styles.spinnerContainer}
     >
-      <LucideLoaderCircle className={styles.spinnerIcson} />
+      <LucideLoaderCircle className={styles.spinnerIcon} />
     </div>
   );
 };
