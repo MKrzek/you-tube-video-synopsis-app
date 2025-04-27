@@ -1,4 +1,5 @@
 import AppHead from "@/components/AppHead";
+import { Spinner } from "@/components/spinner/Spinner";
 import styles from "@/styles/Home.module.css";
 import validateYouTubeUrl from "@/utils/validators/youTubeUrlFormat";
 import { RedirectToSignIn, useUser, SignOutButton, SignedIn } from "@clerk/nextjs";
@@ -123,7 +124,8 @@ const sendByEmail = async() => {
             <button disabled={summaryLoading} className={styles.submitButton}>
               {summaryLoading ? 'Loading summary...' : 'Generate summary'}
             </button>
-          </form>
+            </form>
+            {!summary && !apiError  && <Spinner/>}
 
             { summary && <div className={ styles.buttonGroup }>
                 <button
@@ -146,7 +148,8 @@ const sendByEmail = async() => {
             { summary && <section className={styles.summarySection}>
               <h3>Summary</h3>
               <ReactMarkdown>{summary}</ReactMarkdown>
-            </section> }
+            </section>
+            }
         </main>
       </SignedIn>
     </div>
